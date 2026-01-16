@@ -299,7 +299,7 @@ exports.getSongsByHimnario = async (req, res) => {
   }
 };
 
-exports.searchSongs = async (req, res) => {
+exports.searchSongsText = async (req, res) => {
   try {
     const { q, himnario } = req.query;
 
@@ -310,23 +310,20 @@ exports.searchSongs = async (req, res) => {
       });
     }
 
-    const regex = new RegExp(q, 'i');
-
     const filter = {
-      activo: true,
-      $or: [
-        { titulo: regex },
-        { letra: regex }
-      ]
+      $text: { $search: q },
+      activo: true
     };
 
     if (himnario) {
       filter.himnario = himnario;
     }
 
-    const songs = await Song.find(filter)
-      .sort({ himnario: 1, idcancion: 1 })
-      .select('_id himnario idcancion titulo');
+    const songs = await Song.find(filter, {
+      score: { $meta: 'textScore' }
+    })
+      .sort({ score: { $meta: 'textScore' } })
+      .select('_id himnario idcancion titulo letra');
 
     res.json({
       ok: true,

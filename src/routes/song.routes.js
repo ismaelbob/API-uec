@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getSongs, createSong, updateSong, deleteSong, restoreSong, getNextSongNumber, getSongsByHimnario, updateSongAdmin, getInactiveSongs, searchSongs } = require('../controllers/song.controller');
+const { getSongs, createSong, updateSong, deleteSong, restoreSong, getNextSongNumber, getSongsByHimnario, updateSongAdmin, getInactiveSongs, searchSongsText } = require('../controllers/song.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const { requireAdmin } = require('../middlewares/role.middleware');
 
@@ -11,6 +11,13 @@ const validate = require('../middlewares/validate.middleware');
 
 //obtener canciones
 router.get('/', getSongs);
+
+//buscar canciones
+router.get(
+  '/search',
+  searchSongsText
+);
+
 router.get('/:himnario', getSongsByHimnario);
 
 //crear canción
@@ -77,10 +84,6 @@ router.get(
   getNextSongNumber
 );
 
-//buscar canciones
-router.get(
-  '/search',
-  searchSongs
-);
+
 
 module.exports = router;
