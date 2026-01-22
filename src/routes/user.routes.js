@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { createUser, getUsers, getUserById, updateUser, deleteUser, restoreUser } = require('../controllers/user.controller');
+const { createUser, getUsers, getUserById, updateUser, deleteUser, restoreUser, getInactiveUsers } = require('../controllers/user.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const validate = require('../middlewares/validate.middleware');
 const { createUserValidator, updateUserValidator } = require('../validators/user.validator');
-const { requireAdmin } = require('../middlewares/role.middleware');
+const { requireRole } = require('../middlewares/role.middleware');
 
 
 // 🔐 TODAS las rutas protegidas
@@ -16,6 +16,14 @@ router.post(
   createUserValidator,
   validate,
   createUser
+);
+
+// Admin - ver usuarios inactivos
+router.get(
+  '/admin/inactivos',
+  authMiddleware,
+  requireRole(1),
+  getInactiveUsers
 );
 
 // READ
@@ -35,7 +43,7 @@ router.put(
 router.delete(
   '/:id',
   authMiddleware,
-  requireAdmin,
+  requireRole(1),
   deleteUser
 );
 
@@ -43,8 +51,9 @@ router.delete(
 router.patch(
   '/:id/restore',
   authMiddleware,
-  requireAdmin,
+  requireRole(1),
   restoreUser
 );
+
 
 module.exports = router;

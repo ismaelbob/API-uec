@@ -13,8 +13,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 
-// Rutas
-app.use('/api/users', userRoutes);
+
+//RUTAS
 
 // Ruta de bienvenida
 app.get('/', optionalAuth, (req, res) => {
@@ -34,6 +34,9 @@ app.get('/', optionalAuth, (req, res) => {
     message: 'API funcionando'
   });
 });
+
+// Rutas para usuarios
+app.use('/api/users', userRoutes);
 
 //Ruta de canciones
 app.use('/api/songs', require('./routes/song.routes'));

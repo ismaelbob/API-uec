@@ -129,6 +129,20 @@ exports.refreshToken = async (req, res) => {
   }
 };
 
+exports.verify = async (req, res) => {
+  res.json({
+    ok: true,
+    message: 'Token válido',
+    user: {
+      id: req.user.id,
+      usuario: req.user.usuario,
+      nombre: req.user.nombre,
+      nivel: req.user.nivel
+    }
+  });
+};
+
+
 exports.logout = async (req, res) => {
   const user = await User.findById(req.user.id);
   if (user) {

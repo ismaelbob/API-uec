@@ -163,22 +163,33 @@ const updateUser = async (req, res) => {
       });
     }
 
-    // Campos normales (cualquiera autenticado)
+    const requesterLevel = req.user.nivel;
+    const targetLevel = user.nivel;
+
+    // Regla base: no tocar superiores
+    if (requesterLevel > targetLevel) {
+      return res.status(403).json({
+        ok: false,
+        message: 'No puedes modificar a un usuario de nivel superior'
+      });
+    }
+
+    // Campos normales
     if (usuario) user.usuario = usuario;
     if (nombre) user.nombre = nombre;
 
-    // ⚠️ CAMBIO CRÍTICO: NIVEL
+    // NIVEL
     if (nivel !== undefined) {
-      if (req.user.nivel !== 1) {
+      if (requesterLevel !== 1) {
         return res.status(403).json({
           ok: false,
-          message: 'No tienes permiso para cambiar el nivel'
+          message: 'Solo un admin puede cambiar el nivel'
         });
       }
       user.nivel = nivel;
     }
 
-    // Password (hash condicional)
+    // PASSWORD
     if (password) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
@@ -186,16 +197,9 @@ const updateUser = async (req, res) => {
 
     await user.save();
 
-    res.json({
-      ok: true,
-      message: 'Usuario actualizado correctamente'
-    });
-
+    res.json({ ok: true, message: 'Usuario actualizado' });
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: 'Error del servidor'
-    });
+    res.status(500).json({ ok: false, error });
   }
 };
 /**
@@ -270,12 +274,34 @@ const restoreUser = async (req, res) => {
   }
 };
 
+const getInactiveUsers = async (req, res) => {
+  try {
+    const users = await User.find(
+      { activo: false },
+      { password: 0 } // excluimos password
+    ).sort({ createdAt: -1 });
+
+    res.json({
+      ok: true,
+      total: users.length,
+      users
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      ok: false,
+      message: 'Error al obtener usuarios inactivos'
+    });
+  }
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUserById,
   updateUser,
   deleteUser,
-  restoreUser
+  restoreUser,
+  getInactiveUsers
 };
 

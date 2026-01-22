@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { getSongs, createSong, updateSong, deleteSong, restoreSong, getNextSongNumber, getSongsByHimnario, updateSongAdmin, getInactiveSongs, searchSongsText } = require('../controllers/song.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
-const { requireAdmin } = require('../middlewares/role.middleware');
+const { requireRole } = require('../middlewares/role.middleware');
 
 const { createSongValidator, updateSongValidator, adminSongUpdateValidator, deleteSongValidator, restoreSongValidator } = require('../validators/song.validator');
 const validate = require('../middlewares/validate.middleware');
@@ -26,7 +26,7 @@ router.post(
   authMiddleware,
   createSongValidator,
   validate,
-  requireAdmin,
+  requireRole(1),
   createSong
 );
 
@@ -36,7 +36,7 @@ router.put(
   authMiddleware,
   updateSongValidator,
   validate,
-  requireAdmin,
+  requireRole(1),
   updateSong
 );
 
@@ -44,7 +44,7 @@ router.put(
 router.put(
   '/admin/:id',
   authMiddleware,
-  requireAdmin,
+  requireRole(1),
   adminSongUpdateValidator,
   validate,
   updateSongAdmin
@@ -56,7 +56,7 @@ router.delete(
   authMiddleware,
   deleteSongValidator,
   validate,
-  requireAdmin,
+  requireRole(1),
   deleteSong
 );
 
@@ -64,7 +64,7 @@ router.delete(
 router.patch(
   '/:id/restore',
   authMiddleware,
-  requireAdmin,
+  requireRole(1),
   restoreSongValidator,
   validate,
   restoreSong
@@ -74,7 +74,7 @@ router.patch(
 router.get(
   '/admin/inactivos',
   authMiddleware,
-  requireAdmin,
+  requireRole(1),
   getInactiveSongs
 );
 
