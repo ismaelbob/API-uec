@@ -338,3 +338,41 @@ exports.searchSongsText = async (req, res) => {
     });
   }
 };
+
+exports.existsSongInHimnario = async (req, res) => {
+  try {
+    const { himnario } = req.params;
+    const idcancion = Number(req.params.idcancion);
+
+    if (Number.isNaN(idcancion)) {
+      return res.status(400).json({
+        ok: false,
+        message: 'idcancion debe ser un número'
+      });
+    }
+
+    const song = await Song.findOne({
+      himnario,
+      idcancion
+    }).select('_id');
+
+    if (!song) {
+      return res.status(404).json({
+        ok: false,
+        exists: false
+      });
+    }
+
+    res.json({
+      ok: true,
+      exists: true
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Error al verificar canción'
+    });
+  }
+};
+
