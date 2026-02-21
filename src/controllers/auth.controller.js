@@ -135,7 +135,7 @@ exports.verify = async (req, res) => {
     ok: true,
     message: 'Token válido',
     user: {
-      id: req.user.id,
+      _id: req.user.id,
       usuario: req.user.usuario,
       nombre: req.user.nombre,
       nivel: req.user.nivel
