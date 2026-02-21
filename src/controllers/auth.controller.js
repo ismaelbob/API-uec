@@ -65,6 +65,7 @@ exports.login = async (req, res) => {
     // 5️⃣ Respuesta (NO devolvemos password)
     res.json({
       ok: true,
+      _id: user._id,
       usuario: user.usuario,
       nombre: user.nombre,
       nivel: user.nivel,

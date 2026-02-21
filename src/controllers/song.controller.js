@@ -357,7 +357,7 @@ exports.existsSongInHimnario = async (req, res) => {
     }).select('_id');
 
     if (!song) {
-      return res.status(404).json({
+      return res.status(204).json({
         ok: false,
         exists: false
       });
