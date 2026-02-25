@@ -57,8 +57,10 @@ const getUsers = async (req, res) => {
     // 🔐 Filtro base
     const filter = {};
 
+    filter.activo = true;
+
     // 👤 Usuario normal → solo activos
-    if (!isAdmin) {
+    /*if (!isAdmin) {
       filter.activo = true;
     }
 
@@ -71,7 +73,7 @@ const getUsers = async (req, res) => {
     if (activo === 'false') {
         filter.activo = false;
       }
-    }
+    }*/
 
     // 🔍 búsqueda
     if (search) {
