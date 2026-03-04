@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const { createUser, getUsers, getUserById, updateUser, deleteUser, restoreUser, getInactiveUsers } = require('../controllers/user.controller');
+const { createUser, getUsers, getUserById, updateUser, deleteUser, restoreUser, getInactiveUsers, changePassword } = require('../controllers/user.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const validate = require('../middlewares/validate.middleware');
-const { createUserValidator, updateUserValidator } = require('../validators/user.validator');
+const { createUserValidator, updateUserValidator, changePasswordUserValidator } = require('../validators/user.validator');
 const { requireRole } = require('../middlewares/role.middleware');
 
 
@@ -29,6 +29,15 @@ router.get(
 // READ
 router.get('/', authMiddleware, getUsers);
 router.get('/:id', authMiddleware, getUserById);
+
+// Cambiar contraseña
+router.put(
+  '/change-password',
+  authMiddleware,
+  changePasswordUserValidator,
+  validate,
+  changePassword
+);
 
 // UPDATE
 router.put(

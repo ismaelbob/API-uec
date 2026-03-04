@@ -50,30 +50,12 @@ const getUsers = async (req, res) => {
     const limit = Math.min(parseInt(req.query.limit) || 10, 50);
     const skip = (page - 1) * limit;
 
-    const { search, nivel, activo } = req.query;
-
-    const isAdmin = req.user.nivel === 1;
+    const { search, nivel } = req.query;
 
     // 🔐 Filtro base
     const filter = {};
 
     filter.activo = true;
-
-    // 👤 Usuario normal → solo activos
-    /*if (!isAdmin) {
-      filter.activo = true;
-    }
-
-    // 👑 Admin
-    if (isAdmin) {
-      if (activo === 'true') {
-        filter.activo = true;
-      }
-
-    if (activo === 'false') {
-        filter.activo = false;
-      }
-    }*/
 
     // 🔍 búsqueda
     if (search) {
@@ -204,6 +186,69 @@ const updateUser = async (req, res) => {
     res.status(500).json({ ok: false, error });
   }
 };
+
+/** Cambiar contraseña
+ * PUT /api/users/change-password
+ */
+const changePassword = async (req, res) => {
+  try {
+    const userId = req.user.id; // viene del JWT
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        ok: false,
+        message: 'Debes enviar contraseña actual y nueva'
+      });
+    }
+
+    // Buscar usuario
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        ok: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+
+    // Verificar contraseña actual
+    const isMatch = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        ok: false,
+        message: 'La contraseña actual no es correcta'
+      });
+    }
+    if (currentPassword === newPassword) {
+    return res.status(400).json({
+      ok: false,
+      message: 'La nueva contraseña debe ser diferente'
+    });
+  }
+
+    // Hashear nueva contraseña
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+
+    return res.json({
+      ok: true,
+      message: 'Contraseña actualizada correctamente'
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      message: 'Error al cambiar contraseña'
+    });
+  }
+};
 /**
  * DELETE USER (soft delete)
  * DELETE /api/users/:id
@@ -304,6 +349,7 @@ module.exports = {
   updateUser,
   deleteUser,
   restoreUser,
-  getInactiveUsers
+  getInactiveUsers,
+  changePassword
 };
 
