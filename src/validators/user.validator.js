@@ -1,4 +1,4 @@
-const { check } = require('express-validator');
+const { check, param } = require('express-validator');
 
 exports.createUserValidator = [
   check('usuario')
@@ -43,5 +43,28 @@ exports.changePasswordUserValidator = [
     .optional()
     .isLength({ min: 6 })
     .withMessage('La contraseña debe tener al menos 6 caracteres'),
+];
+
+exports.registerExternalValidator = [
+  check('email')
+    .isEmail().withMessage('Email inválido')
+    .normalizeEmail(),
+
+  check('password')
+    .notEmpty().withMessage('La contraseña es obligatoria')
+    .isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
+
+  check('nombre')
+    .notEmpty().withMessage('El nombre es obligatorio'),
+
+  check('usuario')
+    .notEmpty().withMessage('El usuario es obligatorio')
+    .isLength({ min: 4 }).withMessage('El usuario debe tener al menos 4 caracteres')
+];
+
+exports.resendVerificationValidator = [
+  check('email')
+    .isEmail().withMessage('Email inválido')
+    .normalizeEmail()
 ];
 

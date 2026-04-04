@@ -25,7 +25,20 @@ const UserSchema = new mongoose.Schema({
   },
   refreshToken: {
     type: String
-  }
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
+  emailVerificationToken: String,
+  emailVerificationExpires: Date
 }, {
   timestamps: true
 });
