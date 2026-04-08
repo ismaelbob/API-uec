@@ -1,15 +1,16 @@
-const { Resend } = require('resend');
+const Sib = require('sib-api-v3-sdk');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const client = Sib.ApiClient.instance;
+client.authentications['api-key'].apiKey = process.env.BREVO_API_KEY;
 
 const sendVerificationEmail = async (email, token) => {
   const verifyUrl = `${process.env.FRONTEND_URL}/verificar?token=${token}`;
 
-  await resend.emails.send({
-    from: 'UEC <onboarding@resend.dev>',
-    to: email,
+  await new Sib.TransactionalEmailsApi().sendTransacEmail({
+    sender: { email: process.env.BREVO_SENDER_EMAIL, name: 'UEC' },
+    to: [{ email }],
     subject: 'Verifica tu cuenta - API UEC',
-    html: `
+    htmlContent: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <h2 style="color: #333;">¡Bienvenido a API UEC!</h2>
         <p style="color: #666;">Para completar tu registro, por favor verifica tu email haciendo clic en el siguiente botón:</p>
