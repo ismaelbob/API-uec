@@ -1,20 +1,12 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-const BASE_URL = process.env.FRONTEND_URL || 'https://uec-dev.netlify.app';
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendVerificationEmail = async (email, token) => {
-  const verifyUrl = `${BASE_URL}/verificar?token=${token}`;
+  const verifyUrl = `${process.env.FRONTEND_URL}/verificar?token=${token}`;
 
-  const mailOptions = {
-    from: `"API UEC" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'UEC <onboarding@resend.dev>',
     to: email,
     subject: 'Verifica tu cuenta - API UEC',
     html: `
@@ -29,9 +21,7 @@ const sendVerificationEmail = async (email, token) => {
         <p style="color: #999; font-size: 12px;">Si no creaste una cuenta en API UEC, ignora este email.</p>
       </div>
     `
-  };
-
-  return transporter.sendMail(mailOptions);
+  });
 };
 
 module.exports = { sendVerificationEmail };
