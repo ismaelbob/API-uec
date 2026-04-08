@@ -3,7 +3,7 @@ const { check, param } = require('express-validator');
 exports.createUserValidator = [
   check('usuario')
     .notEmpty().withMessage('El usuario es obligatorio')
-    .isLength({ min: 4 }).withMessage('El usuario debe tener al menos 4 caracteres'),
+    .isLength({ min: 4, max: 10 }).withMessage('El usuario debe tener entre 4 y 10 caracteres'),
 
   check('password')
     .notEmpty().withMessage('La contraseña es obligatoria')
@@ -19,8 +19,8 @@ exports.createUserValidator = [
 exports.updateUserValidator = [
   check('usuario')
     .optional()
-    .isLength({ min: 4 })
-    .withMessage('El usuario debe tener al menos 4 caracteres'),
+    .isLength({ min: 4, max: 10 })
+    .withMessage('El usuario debe tener entre 4 y 10 caracteres'),
 
   check('password')
     .optional()
@@ -59,7 +59,7 @@ exports.registerExternalValidator = [
 
   check('usuario')
     .notEmpty().withMessage('El usuario es obligatorio')
-    .isLength({ min: 4 }).withMessage('El usuario debe tener al menos 4 caracteres')
+    .isLength({ min: 4, max: 10 }).withMessage('El usuario debe tener entre 4 y 10 caracteres')
 ];
 
 exports.resendVerificationValidator = [
