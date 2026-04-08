@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
  */
 const createUser = async (req, res) => {
   try {
-    const { usuario, password, nombre, nivel } = req.body;
+    const { usuario, password, nombre, nivel, email } = req.body;
 
     const exists = await User.findOne({ usuario });
     if (exists) {
@@ -24,7 +24,9 @@ const createUser = async (req, res) => {
       usuario,
       password: hashedPassword,
       nombre,
-      nivel
+      nivel,
+      email,
+      emailVerified: false
     });
 
     await user.save();
@@ -137,7 +139,7 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { usuario, password, nombre, nivel } = req.body;
+    const { usuario, password, nombre, nivel, email } = req.body;
 
     const user = await User.findById(id);
     if (!user) {
@@ -161,6 +163,7 @@ const updateUser = async (req, res) => {
     // Campos normales
     if (usuario) user.usuario = usuario;
     if (nombre) user.nombre = nombre;
+    if (email) user.email = email;
 
     // NIVEL
     if (nivel !== undefined) {
