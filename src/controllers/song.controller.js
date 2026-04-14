@@ -1,4 +1,5 @@
 const Song = require('../models/song.model');
+const User = require('../models/user.model');
 
 exports.getSongs = async (req, res) => {
   try {
@@ -283,12 +284,28 @@ exports.getSongsByHimnario = async (req, res) => {
       himnario,
       activo: true
     })
-      .sort({ idcancion: 1 });
+      .sort({ idcancion: 1 })
+      .lean();
+
+    const userId = req.user?.id;
+    let favoriteIds = new Set();
+
+    if (userId) {
+      const user = await User.findById(userId).select('favoritos');
+      if (user && user.favoritos) {
+        favoriteIds = new Set(user.favoritos.map(id => id.toString()));
+      }
+    }
+
+    const songsWithFavorite = songs.map(song => ({
+      ...song,
+      isFavorite: favoriteIds.has(song._id.toString())
+    }));
 
     res.json({
       ok: true,
-      total: songs.length,
-      songs
+      total: songsWithFavorite.length,
+      songs: songsWithFavorite
     });
 
   } catch (error) {

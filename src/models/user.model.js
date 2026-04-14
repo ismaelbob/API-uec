@@ -38,7 +38,11 @@ const UserSchema = new mongoose.Schema({
     default: false
   },
   emailVerificationToken: String,
-  emailVerificationExpires: Date
+  emailVerificationExpires: Date,
+  favoritos: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Song'
+  }]
 }, {
   timestamps: true
 });

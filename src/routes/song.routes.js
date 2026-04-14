@@ -15,6 +15,7 @@ const {
   existsSongInHimnario 
 } = require('../controllers/song.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
+const optionalAuth = require('../middlewares/optionalAuth.middleware');
 const { requireRole } = require('../middlewares/role.middleware');
 
 const { 
@@ -25,6 +26,12 @@ const {
   restoreSongValidator 
 } = require('../validators/song.validator');
 const validate = require('../middlewares/validate.middleware');
+
+const { 
+  getFavorites, 
+  addFavorite, 
+  removeFavorite 
+} = require('../controllers/favorite.controller');
 
 
 //obtener canciones
@@ -41,7 +48,25 @@ router.get(
   existsSongInHimnario
 );
 
-router.get('/:himnario', getSongsByHimnario);
+router.get(
+  '/:himnario/favorites',
+  optionalAuth,
+  getFavorites
+);
+
+router.post(
+  '/:himnario/favorites/:songId',
+  authMiddleware,
+  addFavorite
+);
+
+router.delete(
+  '/:himnario/favorites/:songId',
+  authMiddleware,
+  removeFavorite
+);
+
+router.get('/:himnario', optionalAuth, getSongsByHimnario);
 
 //crear canción
 router.post(
