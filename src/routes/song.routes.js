@@ -43,11 +43,8 @@ router.get(
   searchSongsText
 );
 
-router.get(
-  '/:himnario/:idcancion/exists',
-  existsSongInHimnario
-);
 
+//obtener canciones favoritas de un himnario
 router.get(
   '/:himnario/favorites',
   optionalAuth,
@@ -65,6 +62,12 @@ router.delete(
   authMiddleware,
   removeFavorite
 );
+
+router.get(
+  '/:himnario/:idcancion/exists',
+  existsSongInHimnario
+);
+
 
 router.get('/:himnario', optionalAuth, getSongsByHimnario);
 
