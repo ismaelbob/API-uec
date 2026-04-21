@@ -53,12 +53,12 @@ exports.login = async (req, res) => {
         nivel: user.nivel
       },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '5m' }
     );
     const refreshToken = jwt.sign(
       { id: user._id },
       process.env.JWT_REFRESH_SECRET,
-      { expiresIn: '30d' }
+      { expiresIn: '15m' }
     );
 
     // guardar refresh token en DB
@@ -116,7 +116,7 @@ exports.refreshToken = async (req, res) => {
         nivel: user.nivel
       },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '5m' }
     );
 
     res.json({
