@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
     const refreshToken = jwt.sign(
       { id: user._id },
       process.env.JWT_REFRESH_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: '30d' }
     );
 
     // guardar refresh token en DB

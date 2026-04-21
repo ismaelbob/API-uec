@@ -77,7 +77,7 @@ router.post(
   authMiddleware,
   createSongValidator,
   validate,
-  requireRole(1),
+  requireRole([1, 2]),
   createSong
 );
 
@@ -87,7 +87,7 @@ router.put(
   authMiddleware,
   updateSongValidator,
   validate,
-  requireRole(1),
+  requireRole([1, 2]),
   updateSong
 );
 
@@ -101,7 +101,7 @@ router.put(
   updateSongAdmin
 );
 
-//eliminar canción
+//eliminar canción (solo admin)
 router.delete(
   '/:id',
   authMiddleware,
