@@ -3,6 +3,10 @@ const cors = require('cors');
 
 const userRoutes = require('./routes/user.routes');
 const authRoutes = require('./routes/auth.routes');
+const leaderRoutes = require('./routes/leader.routes');
+const meetingRoutes = require('./routes/meeting.routes');
+const carouselRoutes = require('./routes/carousel.routes');
+const siteRoutes = require('./routes/site.routes');
 
 const optionalAuth = require('./middlewares/optionalAuth.middleware');//para mostar mensaje de bienvenida si hay token
 
@@ -40,5 +44,11 @@ app.use('/api/users', userRoutes);
 
 //Ruta de canciones
 app.use('/api/songs', require('./routes/song.routes'));
+
+//Rutas de contenido dinámico del sitio
+app.use('/api/leaders', leaderRoutes);
+app.use('/api/meetings', meetingRoutes);
+app.use('/api/carousel', carouselRoutes);
+app.use('/api/site', siteRoutes);
 
 module.exports = app;
