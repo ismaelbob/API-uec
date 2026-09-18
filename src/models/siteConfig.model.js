@@ -6,6 +6,10 @@ const siteConfigSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
+    lema: {
+      type: String,
+      trim: true
+    },
     logoUrl: {
       type: String,
       trim: true
@@ -17,7 +21,37 @@ const siteConfigSchema = new mongoose.Schema(
     mapaUrl: {
       type: String,
       trim: true
-    }
+    },
+    ciudad: {
+      type: String,
+      trim: true
+    },
+    anioFundacion: {
+      type: Number
+    },
+    telefono: {
+      type: String,
+      trim: true
+    },
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true
+    },
+    redes: [{
+      nombre: {
+        type: String,
+        trim: true
+      },
+      url: {
+        type: String,
+        trim: true
+      },
+      orden: {
+        type: Number,
+        default: 0
+      }
+    }]
   },
   {
     timestamps: true,

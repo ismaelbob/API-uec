@@ -24,12 +24,29 @@ exports.updateConfig = async (req, res) => {
   try {
     const site = await SiteConfig.getSingleton();
 
-    const { iglesia, logoUrl, direccion, mapaUrl } = req.body;
+    const {
+      iglesia,
+      lema,
+      logoUrl,
+      direccion,
+      mapaUrl,
+      ciudad,
+      anioFundacion,
+      telefono,
+      email,
+      redes
+    } = req.body;
 
     if (iglesia !== undefined) site.iglesia = iglesia;
+    if (lema !== undefined) site.lema = lema;
     if (logoUrl !== undefined) site.logoUrl = logoUrl;
     if (direccion !== undefined) site.direccion = direccion;
     if (mapaUrl !== undefined) site.mapaUrl = mapaUrl;
+    if (ciudad !== undefined) site.ciudad = ciudad;
+    if (anioFundacion !== undefined) site.anioFundacion = anioFundacion;
+    if (telefono !== undefined) site.telefono = telefono;
+    if (email !== undefined) site.email = email;
+    if (redes !== undefined) site.redes = redes;
 
     await site.save();
 
