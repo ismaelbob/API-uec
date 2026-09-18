@@ -18,6 +18,12 @@ const createLeaderValidator = [
     .optional({ nullable: true })
     .isLength({ max: 30 }).withMessage('Teléfono demasiado largo'),
 
+  body('fotoUrl')
+    .optional({ nullable: true })
+    .if(body('fotoUrl').notEmpty())
+    .isURL({ require_protocol: true }).withMessage('URL de foto inválida')
+    .isLength({ max: 500 }).withMessage('URL demasiado larga'),
+
   body('orden')
     .optional()
     .isInt({ min: 0 }).withMessage('Orden inválido')
@@ -40,6 +46,12 @@ const updateLeaderValidator = [
   body('telefono')
     .optional({ nullable: true })
     .isLength({ max: 30 }).withMessage('Teléfono demasiado largo'),
+
+  body('fotoUrl')
+    .optional({ nullable: true })
+    .if(body('fotoUrl').notEmpty())
+    .isURL({ require_protocol: true }).withMessage('URL de foto inválida')
+    .isLength({ max: 500 }).withMessage('URL demasiado larga'),
 
   body('orden')
     .optional()

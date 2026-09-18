@@ -1,4 +1,5 @@
 const Leader = require('../models/leader.model');
+const { toDirectDriveUrl } = require('../utils/googleDrive');
 
 exports.getLeaders = async (req, res) => {
   try {
@@ -47,6 +48,10 @@ exports.getLeaderById = async (req, res) => {
 
 exports.createLeader = async (req, res) => {
   try {
+    if (req.body.fotoUrl) {
+      req.body.fotoUrl = toDirectDriveUrl(req.body.fotoUrl);
+    }
+
     const leader = new Leader(req.body);
     await leader.save();
 
@@ -67,6 +72,10 @@ exports.createLeader = async (req, res) => {
 exports.updateLeader = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (req.body.fotoUrl) {
+      req.body.fotoUrl = toDirectDriveUrl(req.body.fotoUrl);
+    }
 
     const leader = await Leader.findByIdAndUpdate(
       id,

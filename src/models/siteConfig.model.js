@@ -29,6 +29,13 @@ const siteConfigSchema = new mongoose.Schema(
     anioFundacion: {
       type: Number
     },
+    anioactual: {
+      type: Number
+    },
+    pais: {
+      type: String,
+      trim: true
+    },
     telefono: {
       type: String,
       trim: true

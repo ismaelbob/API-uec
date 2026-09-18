@@ -2,6 +2,7 @@ const SiteConfig = require('../models/siteConfig.model');
 const Leader = require('../models/leader.model');
 const Meeting = require('../models/meeting.model');
 const CarouselImage = require('../models/carouselImage.model');
+const { toDirectDriveUrl } = require('../utils/googleDrive');
 
 exports.getConfig = async (req, res) => {
   try {
@@ -32,6 +33,8 @@ exports.updateConfig = async (req, res) => {
       mapaUrl,
       ciudad,
       anioFundacion,
+      anioactual,
+      pais,
       telefono,
       email,
       redes
@@ -39,11 +42,13 @@ exports.updateConfig = async (req, res) => {
 
     if (iglesia !== undefined) site.iglesia = iglesia;
     if (lema !== undefined) site.lema = lema;
-    if (logoUrl !== undefined) site.logoUrl = logoUrl;
+    if (logoUrl !== undefined) site.logoUrl = toDirectDriveUrl(logoUrl);
     if (direccion !== undefined) site.direccion = direccion;
     if (mapaUrl !== undefined) site.mapaUrl = mapaUrl;
     if (ciudad !== undefined) site.ciudad = ciudad;
     if (anioFundacion !== undefined) site.anioFundacion = anioFundacion;
+    if (anioactual !== undefined) site.anioactual = anioactual;
+    if (pais !== undefined) site.pais = pais;
     if (telefono !== undefined) site.telefono = telefono;
     if (email !== undefined) site.email = email;
     if (redes !== undefined) site.redes = redes;

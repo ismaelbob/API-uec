@@ -1,4 +1,5 @@
 const CarouselImage = require('../models/carouselImage.model');
+const { toDirectDriveUrl } = require('../utils/googleDrive');
 
 exports.getCarouselImages = async (req, res) => {
   try {
@@ -47,6 +48,10 @@ exports.getCarouselImageById = async (req, res) => {
 
 exports.createCarouselImage = async (req, res) => {
   try {
+    if (req.body.url) {
+      req.body.url = toDirectDriveUrl(req.body.url);
+    }
+
     const image = new CarouselImage(req.body);
     await image.save();
 
@@ -67,6 +72,10 @@ exports.createCarouselImage = async (req, res) => {
 exports.updateCarouselImage = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (req.body.url) {
+      req.body.url = toDirectDriveUrl(req.body.url);
+    }
 
     const image = await CarouselImage.findByIdAndUpdate(
       id,

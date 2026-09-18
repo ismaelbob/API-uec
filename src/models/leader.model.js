@@ -16,6 +16,10 @@ const leaderSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
+    fotoUrl: {
+      type: String,
+      trim: true
+    },
     orden: {
       type: Number,
       default: 0

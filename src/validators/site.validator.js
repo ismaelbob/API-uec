@@ -34,6 +34,15 @@ const updateSiteValidator = [
     .optional({ nullable: true })
     .isInt({ min: 1800, max: 2100 }).withMessage('Año de fundación inválido'),
 
+  body('anioactual')
+    .optional({ nullable: true })
+    .isInt({ min: 1800, max: 2100 }).withMessage('Año actual inválido'),
+
+  body('pais')
+    .optional()
+    .notEmpty().withMessage('El país no puede estar vacío')
+    .isLength({ max: 100 }).withMessage('País demasiado largo'),
+
   body('telefono')
     .optional({ nullable: true })
     .isLength({ max: 30 }).withMessage('Teléfono demasiado largo'),
